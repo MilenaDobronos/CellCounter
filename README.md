@@ -1,5 +1,5 @@
 # CellCounter
-Before you start pls ensure yourself unlimited time for the suffering of installing python modules
+Before you start pls ensure yourself unlimited time for the suffering of installing python modules and getting them to work
 
 Our CellCounter requires several modules
 1) cv2 for Computer Vision tools
