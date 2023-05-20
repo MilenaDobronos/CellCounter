@@ -3,10 +3,8 @@
 import cv2
 import numpy as np
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QPixmap, QFont
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QToolTip, QMessageBox, QMenu
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QToolTip, QMessageBox
 import sys
 
 def detect_circular_cells(image_path, min_radius=10, max_radius=50, dp=1, min_dist=20, canny_thresh=200, accumulator_thresh=20, draw_circles=True):
@@ -52,15 +50,16 @@ class MyWindow(QMainWindow):
         cv2.imwrite('stack2.jpg', output_image)
         cv2.imwrite('stack2_resized.jpg', resized)
         
-        self.label.setText("Number of cells: " + str(num_circles) + '\nAlive: ' + str(num_alive) + '\nDead: ' + str(num_circles-num_alive) + '\nAlive_per: ' + str(num_aliveper) + '\nDead_per: ' + str(100-num_aliveper))
+        a = round((num_aliveper), 2)
+        b = round((100-num_aliveper), 2)   
+        self.label.setText("Number of cells: " + str(num_circles) + '\nAlive: ' + str(num_alive) + '\nDead: ' + str(num_circles-num_alive) + '\nAlive_per: ' + str(a) + '\nDead_per: ' + str(b))
         self.labelf.setText("File: " + self.filepath)
         
         self.labelp = QtWidgets.QLabel(self)
-        self.labelp.move(300, 100)
-        rez = QSize(500, 500)
         pixmap = QPixmap('stack2_resized.jpg')
-        pixmap = pixmap.scaled(rez)        
-        self.labelp.setPixmap(pixmap)        
+        self.labelp.setPixmap(pixmap)
+        self.labelp.setFixedSize(400, 400)
+        
         
         self.setCentralWidget(self.labelp)
         self.update()
@@ -75,7 +74,8 @@ class MyWindow(QMainWindow):
         self.label.setToolTip('You can see final result here')
         self.label.setFont(QFont('Arial', 14))        
         self.label.setText("Cell Count: ")
-        self.label.setGeometry(600,40,250,50)
+        self.label.setGeometry(600,130,150,100)
+     
         
         QToolTip.setFont(QFont('Arial', 10))
         self.setToolTip('You can see the name of your file here')
@@ -83,14 +83,14 @@ class MyWindow(QMainWindow):
         self.labelf.setToolTip('You can see the name of your file here')
         self.labelf.setFont(QFont('Arial', 14))        
         self.labelf.setText("File: ")
-        self.labelf.setGeometry(90, 40,400,50)
+        self.labelf.setGeometry(30,450,750,20)
 
 
         QToolTip.setFont(QFont('Arial', 10))
         self.setToolTip('This is a button to upload image')
         self.bfile = QtWidgets.QPushButton(self)
         self.bfile.setToolTip('This is a button to upload image')
-        self.bfile.setGeometry(100, 400, 200, 50)
+        self.bfile.setGeometry(30, 600, 141, 32)
         self.bfile.setText("Choose image file")
         self.bfile.clicked.connect(self.dialog)
 
@@ -98,16 +98,29 @@ class MyWindow(QMainWindow):
         self.setToolTip('Press this button to proceed calculations')
         self.bok = QtWidgets.QPushButton(self)
         self.bok.setToolTip('Press this button to proceed calculations')
-        self.bok.setGeometry(500, 50, 50, 30)
-        self.bok.setText("OK")
+        self.bok.setGeometry(200, 600, 111, 32)
+        self.bok.setText("Analyze Image")
         self.bok.clicked.connect(self.buttonok_clicked)
+        self.bok.raise_()
         
         
         self.labeli = QtWidgets.QLabel(self)
         self.labeli.setFont(QFont('Arial', 14))        
         self.labeli.setText("Instruction: " + '\n1. Choose the image file' + '\n2. Click OK button' + '\n3. Enjoy the result')
-        self.labeli.setGeometry(90,150,250,250)
-            
+        self.labeli.setGeometry(600,300,150,100)
+
+        self.label_h = QtWidgets.QLabel(self)
+        pix = QPixmap('/Users/milenadobronos/Desktop/CellCounter/ham33.jpg')
+        self.label_h.setPixmap(pix)
+        self.label_h.setFixedSize(200, 200)
+        self.label_h.setGeometry(400,600,200,200)
+        
+        self.labeli = QtWidgets.QLabel(self)
+        self.labeli.setFont(QFont('Arial', 14))        
+        self.labeli.setText("Me with PyQt5")
+        self.labeli.setGeometry(400,550,200,100)
+
+        
     def closeEvent(self, event):
 
         reply = QMessageBox.question(self, 'Message',
